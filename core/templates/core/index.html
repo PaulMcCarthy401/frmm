@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+<h1 class="text-center">Report a ticket</h1>
+
+{% load crispy_forms_tags %}
+{% crispy form %}
+
+{% comment %} {% if ticket_list %}
+    <ul>
+    {% for ticket in ticket_list %}
+	<li><a href="{% url 'core:detail' ticket.id %}">{{ ticket.subject }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No tickets are available.</p>
+{% endif %} {% endcomment %}
+
+
+{% endblock %}
