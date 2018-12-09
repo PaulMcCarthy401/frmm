@@ -5,13 +5,9 @@ from django.contrib.auth.models import Group
 
 
 def create_default_groups(apps, schema_editor):
-    volunteer_group = Group("Volunteer")
-    fr_group = Group("First Responder")
-    chief_group = Group("Chief")
-
-    volunteer_group.save()
-    fr_group.save()
-    chief_group.save()
+    volunteer_group = Group.objects.create(name="Volunteer")
+    fr_group = Group.objects.create(name="First Responder")
+    chief_group = Group.objects.create(name="Chief")
 
 class Migration(migrations.Migration):
 

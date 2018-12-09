@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
+    'mapwidgets',
 ]
 
 MIDDLEWARE = [
@@ -120,9 +121,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 # GDAL_LIBRARY_PATH = 'C:\Program Files\GDAL'
+GOOGLE_MAP_API_KEY = ' AIzaSyBqqAAPaX0ixz9AcKWOPH58NuqWQhoVOf0'
+
+GDAL_LIBRARY_PATH = '/usr/local/lib/libgdal.so'
