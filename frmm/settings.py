@@ -78,8 +78,8 @@ WSGI_APPLICATION = 'frmm.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
+        'NAME': os.path.join(BASE_DIR, 'db.spatialite'),
     }
 }
 
@@ -128,6 +128,16 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 # GDAL_LIBRARY_PATH = 'C:\Program Files\GDAL'
-GOOGLE_MAP_API_KEY = ' AIzaSyBqqAAPaX0ixz9AcKWOPH58NuqWQhoVOf0'
-
 GDAL_LIBRARY_PATH = '/usr/local/lib/libgdal.so'
+
+MAP_WIDGETS = {
+    "GooglePointFieldWidget": (
+        ("zoom", 15),
+        ("mapCenterLocationName", "london"),
+        ("GooglePlaceAutocompleteOptions", {'componentRestrictions': {'country': 'uk'}}),
+        ("markerFitZoom", 12),
+    ),
+    "GOOGLE_MAP_API_KEY": "AIzaSyBqqAAPaX0ixz9AcKWOPH58NuqWQhoVOf0"
+}
+
+SPATIALITE_LIBRARY_PATH = 'mod_spatialite'
