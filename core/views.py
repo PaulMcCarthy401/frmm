@@ -4,6 +4,12 @@ from django.urls import reverse
 from django.views import generic
 from django.views.generic.edit import CreateView, FormView
 
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import Group
+from django.shortcuts import render, redirect
+
+import sys
 from .models import Ticket
 from .forms import TicketForm
 
@@ -43,3 +49,25 @@ class TicketCreate(CreateView):
         form.helper = FormHelper()
         form.helper.add_input(Submit('submit', 'Create', css_class='btn-primary'))
         return form
+
+# https://simpleisbetterthancomplex.com/tutorial/2017/02/18/how-to-create-user-sign-up-view.html
+# https://docs.djangoproject.com/en/1.8/_modules/django/contrib/auth/forms/
+# -> UserCreationForm
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+
+            # Add the user to the Volunteers group
+            volunteer_group = Group.objects.get(name='Volunteer') 
+            volunteer_group.user_set.add(user)
+
+            login(request, user)
+            return redirect('core:index')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})

@@ -56,7 +56,6 @@ body {
 <body class="text-center">
   <form class="form-signin" method="post">
     {% csrf_token %}
-    {% comment %} {{ form.as_p }} {% endcomment %}
 
     <label for="{{ form.username.id_for_label }}">Username:</label>
     <input type="text" class="form-control" name="username" autofocus required>
