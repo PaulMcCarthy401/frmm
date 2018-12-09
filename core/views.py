@@ -10,6 +10,8 @@ from .forms import TicketForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
+#https://stackoverflow.com/questions/4789021/in-django-how-do-i-check-if-a-user-is-in-a-certain-group
+#https://bradmontgomery.net/blog/restricting-access-by-group-in-django/
 
 class IndexView(generic.ListView):
     template_name = 'core/index.html'
