@@ -1,0 +1,54 @@
+{% extends "core/base_main.html" %}
+
+{% block content %}
+
+    <h1 class="text-center">Missions</h1>
+
+    {% comment %} {% load crispy_forms_tags %}
+    {% crispy form %} {% endcomment %}
+
+    {% comment %} 
+        date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+
+    priority = models.IntegerField(blank=False, default=0)
+    description = models.TextField()
+    status = models.CharField(max_length=2, choices=STATUS_TYPES)
+    related_tickets = models.ManyToManyField(Ticket)
+     {% endcomment %}
+    <a class="btn btn-primary float-right" href="/mission">Start New Mission</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Priority</th>
+                <th scope="col">Status</th>
+                <th scope="col">Description</th>
+                <th scope="col">Last Updated</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mission in object_list %}
+            <tr>
+                {% comment %} <th scope="row">1</th> {% endcomment %}
+                <td>{{ mission.priority }}</td>
+                {% with badge_type=mission.get_bootstrap_badge_type %}
+                <td><span class="badge badge-{{badge_type}}">{{ mission.get_status_display }}</span></td>
+                {% endwith %}
+                <td>{{ mission.description }}</td>
+                <td>{{ mission.date_created|date }}</td>
+                <td><a href="/mission/{{mission.id}}">Edit</a></td>
+            </tr>
+        {% empty %}
+        <tr>
+        <td>
+        <li>No missions to display.</li>
+        </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

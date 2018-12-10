@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.gis.db.models import PointField
+from django.contrib.auth import get_user_model
 
 
 class Ticket(models.Model):
@@ -36,9 +37,20 @@ class Mission(models.Model):
     description = models.TextField()
     status = models.CharField(max_length=2, choices=STATUS_TYPES)
     related_tickets = models.ManyToManyField(Ticket)
+    first_responders = models.ManyToManyField(get_user_model())
 
     def __str__(self):
         return self.description
+    
+    def get_bootstrap_badge_type(self):
+        if self.status == 'NS':
+            return 'secondary'
+        elif self.status == 'IP':
+            return 'primary'
+        elif self.status == 'S':
+            return 'success'
+        elif self.status == 'F':
+            return 'danger'
 
 class Resource(models.Model):
     name = models.TextField(max_length=120)

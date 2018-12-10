@@ -1,0 +1,18 @@
+{% extends "core/base_main.html" %}
+
+{% block content %}
+    {% if mission %}
+    <h1 class="text-center">Update a Mission</h1>
+    <h6><small class="text-muted text-center">Date Created: {{mission.date_created|date:'D d M Y g:i A'}}</small></h6>
+    <h6><small class="text-muted text-center">Last Updated: {{mission.date_created|date:'D d M Y g:i A'}}</small></h6>
+    {% else %}
+    <h1 class="text-center">Create a Mission</h1>
+
+    {% endif %}
+
+    <p><small></small></p>
+    <p></p>
+    {% load crispy_forms_tags %}
+    {% crispy form %}
+
+{% endblock %}

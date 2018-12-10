@@ -10,7 +10,12 @@ urlpatterns = [
     # url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
     path('', include('django.contrib.auth.urls')),
     path('', views.TicketCreate.as_view(), name='index'),
-    url(r'^register/$', views.register, name='register'),
+    path('volunteer', views.VolunteerPage.as_view(), name='volunteer_page'),
+    path('firstresponder', views.FirstResponderPage.as_view(), name='first_responder_page'),
+    path('firstresponderchief', views.FirstResponderChiefPage.as_view(), name='first_responder_chief_page'),
+    path('mission/', views.MissionCreate.as_view(), name='mission_create'),
+    path('mission/<int:pk>/', views.MissionUpdate.as_view(), name='mission_update'),
+    path('register/', views.register, name='register'),
     # url(r'^volunteer/$', views.register, name='register'),
     # path('tickets/<int:pk>/', views.DetailView.as_view(), name='detail'),
 ]
