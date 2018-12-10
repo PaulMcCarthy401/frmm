@@ -29,10 +29,17 @@ class Mission(models.Model):
         ('F', 'Failure')
     )
 
-    priority = models.IntegerField(blank=False, default=0, min_value=0, max_value=10)
-    date_created = models.DateTimeField()
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+
+    priority = models.IntegerField(blank=False, default=0)
     description = models.TextField()
-    status = models.ChoiceField(choices=STATUS_TYPES)
+    status = models.CharField(max_length=2, choices=STATUS_TYPES)
+    related_tickets = models.ManyToManyField(Ticket)
 
     def __str__(self):
-        return self.subject
+        return self.description
+
+class Resource(models.Model):
+    name = models.TextField(max_length=120)
+    allocated_to = models.ForeignKey(Mission, on_delete=models.SET_NULL, blank=True, null=True)
