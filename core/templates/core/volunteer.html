@@ -7,4 +7,25 @@
     {% load crispy_forms_tags %}
     {% crispy form %}
 
+    <h1 class="text-center">Current Missions:</h1>
+
+    {% for mission in missions %}
+        <h1>Mission #{{forloop.counter}}</h1>
+        <p>Priority: {{ mission.priority }}</p>
+        {% with badge_type=mission.get_bootstrap_badge_type %}
+        <p>Status: <span class="badge badge-{{badge_type}}">{{ mission.get_status_display }}</span></p>
+        {% endwith %}
+        <p>Description: {{ mission.description }}</p>
+        <h6><small class="text-muted text-center">Date Created: {{mission.date_created|date:'D d M Y g:i A'}}</small></h6>
+        <h6><small class="text-muted text-center">Last Updated: {{mission.date_created|date:'D d M Y g:i A'}}</small></h6>
+        {% for ticket in mission.related_tickets.all %}
+        <a href="https://maps.googleapis.com/maps/api/staticmap?center={{ticket.location.x}}%2C{{ticket.location.y}}&amp;markers=size%3Anormal%7Ccolor%3A%7Cicon%3A%7C{{ticket.location.x}}%2C{{ticket.location.y}}&amp;zoom=15&amp;size=480x480&amp;thumbnail_size=160x160&amp;scale=&amp;format=&amp;maptype=&amp;path=&amp;visible=&amp;style=&amp;language=&amp;region=&amp;key=AIzaSyBqqAAPaX0ixz9AcKWOPH58NuqWQhoVOf0" class="map-widget-overlay-link"><img src="https://maps.googleapis.com/maps/api/staticmap?center={{ticket.location.x}}%2C{{ticket.location.y}}&amp;markers=size%3Anormal%7Ccolor%3A%7Cicon%3A%7C{{ticket.location.x}}%2C{{ticket.location.y}}&amp;zoom=15&amp;size=480x480&amp;thumbnail_size=160x160&amp;scale=&amp;format=&amp;maptype=&amp;path=&amp;visible=&amp;style=&amp;language=&amp;region=&amp;key=AIzaSyBqqAAPaX0ixz9AcKWOPH58NuqWQhoVOf0"></a>
+        {% endfor %}
+        </tr>
+    {% empty %}
+    <p>
+    Currently not assigned to any missions.
+    </p>
+    {% endfor %}
+
 {% endblock %}

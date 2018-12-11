@@ -45,6 +45,7 @@ class Mission(models.Model):
     status = models.CharField(max_length=2, choices=STATUS_TYPES)
     related_tickets = models.ManyToManyField(Ticket)
     first_responders = models.ManyToManyField(get_user_model(), blank=True)
+    volunteers = models.ManyToManyField(get_user_model(), blank=True, related_name="volunteer_missions")
     resources = models.ManyToManyField(Resource, blank=True)
 
     def __str__(self):

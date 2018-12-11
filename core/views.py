@@ -112,6 +112,7 @@ class MissionCreate(CreateView):
         form.helper.add_input(Submit('submit', 'Create', css_class='btn-primary float-right'))
 
         form.fields['first_responders'].queryset = get_user_model().objects.filter(groups__name='First Responder')
+        form.fields['volunteers'].queryset = get_user_model().objects.filter(groups__name='Volunteer')
         form.fields['resources'].queryset = Resource.objects.all()#.union(
         #     Resource.objects.filter(mission__status='S'),
         #     Resource.objects.filter(mission__status='F')
@@ -130,6 +131,7 @@ class MissionUpdate(UpdateView):
         form.helper.add_input(Submit('submit', 'Update', css_class='btn-primary float-right'))
 
         form.fields['first_responders'].queryset = get_user_model().objects.filter(groups__name='First Responder')
+        form.fields['volunteers'].queryset = get_user_model().objects.filter(groups__name='Volunteer')
         form.fields['resources'].queryset = Resource.objects.all()
 
         return form
@@ -146,6 +148,11 @@ class ResourceCreateView(CreateView):
         form.helper.add_input(Submit('submit', 'Create', css_class='btn-primary float-right'))
 
         return form
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['missions'] = self.request.user.volunteer_missions.all()
+        return context
 
 class TicketView(DetailView):
     model = Ticket
