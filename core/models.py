@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.gis.db.models import PointField
 from django.contrib.auth import get_user_model
+from mapwidgets.widgets import GoogleStaticOverlayMapWidget
 
 
 class Ticket(models.Model):
@@ -14,6 +15,12 @@ class Ticket(models.Model):
 
     def __str__(self):
         return self.subject
+
+class Resource(models.Model):
+    name = models.TextField(max_length=120)
+
+    def __str__(self):
+        return self.name
 
 class Mission(models.Model):
     # id
@@ -37,7 +44,8 @@ class Mission(models.Model):
     description = models.TextField()
     status = models.CharField(max_length=2, choices=STATUS_TYPES)
     related_tickets = models.ManyToManyField(Ticket)
-    first_responders = models.ManyToManyField(get_user_model())
+    first_responders = models.ManyToManyField(get_user_model(), blank=True)
+    resources = models.ManyToManyField(Resource, blank=True)
 
     def __str__(self):
         return self.description
@@ -51,7 +59,3 @@ class Mission(models.Model):
             return 'success'
         elif self.status == 'F':
             return 'danger'
-
-class Resource(models.Model):
-    name = models.TextField(max_length=120)
-    allocated_to = models.ForeignKey(Mission, on_delete=models.SET_NULL, blank=True, null=True)

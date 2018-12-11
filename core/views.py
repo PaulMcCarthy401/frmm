@@ -2,6 +2,8 @@ from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
+from django.views.generic.base import TemplateView
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, FormView, UpdateView
 
 from django.contrib.auth import login, authenticate
@@ -12,14 +14,21 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.views.generic.list import ListView
 
+from django.contrib.gis.forms import PointField
+
 import sys
-from .models import Ticket, Mission
-from .forms import TicketForm
+from .models import Ticket, Mission, Resource
+from .forms import TicketForm, TicketReadonlyForm
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
 from django.contrib.auth import get_user_model
+
+from mapwidgets.widgets import GooglePointFieldWidget, GoogleStaticOverlayMapWidget
+
+from django.forms.models import modelform_factory
+
 
 
 #https://stackoverflow.com/questions/4789021/in-django-how-do-i-check-if-a-user-is-in-a-certain-group
@@ -60,16 +69,25 @@ class VolunteerPage(CreateView):
     template_name = 'core/volunteer.html'
     success_url = './'
 
-class FirstResponderPage(CreateView):
-    model = Ticket
+class FirstResponderPage(TemplateView):
     template_name = 'core/first_responder.html'
-    success_url = './'
 
-class FirstResponderChiefPage(ListView):
-    model = Mission
-    paginate_by = 100  # if pagination is desired
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['missions'] = Mission.objects.filter(first_responders=self.request.user)
+        return context
+
+class FirstResponderChiefPage(TemplateView):
+    # model = Mission
+    # paginate_by = 100  # if pagination is desired
     template_name = 'core/first_responder_chief.html'
     fields = '__all__'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object_list'] = Mission.objects.all()
+        context['tickets'] = Ticket.objects.all()
+        return context
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -87,6 +105,10 @@ class MissionCreate(CreateView):
         form.helper.add_input(Submit('submit', 'Create', css_class='btn-primary float-right'))
 
         form.fields['first_responders'].queryset = get_user_model().objects.filter(groups__name='First Responder')
+        form.fields['resources'].queryset = Resource.objects.all()#.union(
+        #     Resource.objects.filter(mission__status='S'),
+        #     Resource.objects.filter(mission__status='F')
+        # ))
 
         return form
 
@@ -101,8 +123,13 @@ class MissionUpdate(UpdateView):
         form.helper.add_input(Submit('submit', 'Update', css_class='btn-primary float-right'))
 
         form.fields['first_responders'].queryset = get_user_model().objects.filter(groups__name='First Responder')
+        form.fields['resources'].queryset = Resource.objects.all()
 
         return form
+
+class TicketView(DetailView):
+    model = Ticket
+    fields = '__all__'
 
 # https://simpleisbetterthancomplex.com/tutorial/2017/02/18/how-to-create-user-sign-up-view.html
 # https://docs.djangoproject.com/en/1.8/_modules/django/contrib/auth/forms/

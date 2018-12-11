@@ -43,7 +43,35 @@
         {% empty %}
         <tr>
         <td>
-        <li>No missions to display.</li>
+        No missions to display.
+        </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h1 class="text-center">Tickets</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Description</th>
+                <th scope="col">Location</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ticket in tickets %}
+            <tr>
+                {% comment %} <th scope="row">1</th> {% endcomment %}
+                <td>{{ ticket.subject }}</td>
+                <td>{{ ticket.location.y }}, {{ ticket.location.x }}</td>
+                <td><a href="/ticket/{{ticket.id}}">View</a></td>
+            </tr>
+        {% empty %}
+        <tr>
+        <td>
+        No missions to display.
         </td>
         </tr>
         {% endfor %}

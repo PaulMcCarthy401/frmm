@@ -1,0 +1,22 @@
+{% extends "core/base_main.html" %}
+
+{% block content %}
+    {% comment %} {% if mission %}
+    <h1 class="text-center">Update a Mission</h1>
+    <h6><small class="text-muted text-center">Date Created: {{mission.date_created|date:'D d M Y g:i A'}}</small></h6>
+    <h6><small class="text-muted text-center">Last Updated: {{mission.date_created|date:'D d M Y g:i A'}}</small></h6>
+    {% else %}
+    <h1 class="text-center">Create a Mission</h1>
+
+    {% endif %}
+    
+
+    {% load crispy_forms_tags %}
+    {% crispy form %} {% endcomment %}
+
+    <h1 class="text-center">View Ticket</h1>
+
+    {% comment %} <p>Subject: {{ ticket.subject }}</p>
+    <a href="https://maps.googleapis.com/maps/api/staticmap?center={{ticket.location.x}}%2C{{ticket.location.y}}&amp;markers=size%3Anormal%7Ccolor%3A%7Cicon%3A%7C{{ticket.location.x}}%2C{{ticket.location.y}}&amp;zoom=15&amp;size=480x480&amp;thumbnail_size=160x160&amp;scale=&amp;format=&amp;maptype=&amp;path=&amp;visible=&amp;style=&amp;language=&amp;region=&amp;key=AIzaSyBqqAAPaX0ixz9AcKWOPH58NuqWQhoVOf0" class="map-widget-overlay-link"><img src="https://maps.googleapis.com/maps/api/staticmap?center={{ticket.location.x}}%2C{{ticket.location.y}}&amp;markers=size%3Anormal%7Ccolor%3A%7Cicon%3A%7C{{ticket.location.x}}%2C{{ticket.location.y}}&amp;zoom=15&amp;size=480x480&amp;thumbnail_size=160x160&amp;scale=&amp;format=&amp;maptype=&amp;path=&amp;visible=&amp;style=&amp;language=&amp;region=&amp;key=AIzaSyBqqAAPaX0ixz9AcKWOPH58NuqWQhoVOf0"></a>
+    <a class="btn btn-primary float-right" href="/firstresponderchief">Back to Missions</a> {% endcomment %}
+{% endblock %}

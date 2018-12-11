@@ -15,6 +15,7 @@ urlpatterns = [
     path('firstresponderchief', views.FirstResponderChiefPage.as_view(), name='first_responder_chief_page'),
     path('mission/', views.MissionCreate.as_view(), name='mission_create'),
     path('mission/<int:pk>/', views.MissionUpdate.as_view(), name='mission_update'),
+    path('ticket/<int:pk>/', views.TicketView.as_view(), name='ticket_view'),
     path('register/', views.register, name='register'),
     # url(r'^volunteer/$', views.register, name='register'),
     # path('tickets/<int:pk>/', views.DetailView.as_view(), name='detail'),

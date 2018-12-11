@@ -1,8 +1,9 @@
 import sys
 from django import forms
+from django.contrib.gis.forms import PointField
 from core.models import Ticket, Mission
 
-from mapwidgets.widgets import GooglePointFieldWidget
+from mapwidgets.widgets import GooglePointFieldWidget, GoogleStaticOverlayMapWidget
 
 
 class TicketForm(forms.ModelForm):
@@ -24,6 +25,11 @@ class TicketForm(forms.ModelForm):
     def form_invalid(self, form):
         print(sys.stderr, "Form was invalid")
         return HttpResponseRedirect(self.get_success_url())
+
+class TicketReadonlyForm(forms.Form):
+    subject = forms.CharField()
+    location = PointField(widget=GoogleStaticOverlayMapWidget)
+
 
 # class MissionForm(forms.ModelForm):
 #     class Meta:
