@@ -18,7 +18,7 @@ from django.contrib.gis.forms import PointField
 
 import sys
 from .models import Ticket, Mission, Resource
-from .forms import TicketForm, TicketReadonlyForm
+from .forms import TicketForm, TicketReadonlyForm, ResourceForm
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
@@ -45,7 +45,7 @@ class IndexView(generic.ListView):
 # class TicketCreate(FormView):
 #     template_name = 'core/index.html'
 #     success_url = './'
-        
+
 #     def get_form(self, form_class=None):
 #         form = super().get_form(form_class)
 #         form.helper = FormHelper()
@@ -57,17 +57,24 @@ class TicketCreate(CreateView):
     template_name = 'core/index.html'
     success_url = './'
     form_class = TicketForm
-        
+
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.helper = FormHelper()
         form.helper.add_input(Submit('submit', 'Create', css_class='btn-primary'))
         return form
 
-class VolunteerPage(CreateView):
-    model = Ticket
+class VolunteerPage(TemplateView):
     template_name = 'core/volunteer.html'
-    success_url = './'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        resource_form = ResourceForm()
+        resource_form.helper = FormHelper()
+        resource_form.helper.add_input(Submit('submit', 'Submit', css_class='btn-primary float-right'))
+        resource_form.helper.action = 'resource/'
+        context['resource_form'] = resource_form
+        return context
 
 class FirstResponderPage(TemplateView):
     template_name = 'core/first_responder.html'
@@ -126,6 +133,19 @@ class MissionUpdate(UpdateView):
         form.fields['resources'].queryset = Resource.objects.all()
 
         return form
+        
+class ResourceCreateView(CreateView):
+    model = Resource
+    success_url = '/volunteer'
+    template_name = 'core/volunteer.html'
+    form_class = ResourceForm
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.helper = FormHelper()
+        form.helper.add_input(Submit('submit', 'Create', css_class='btn-primary float-right'))
+
+        return form
 
 class TicketView(DetailView):
     model = Ticket
@@ -144,7 +164,7 @@ def register(request):
             user = authenticate(username=username, password=raw_password)
 
             # Add the user to the Volunteers group
-            volunteer_group = Group.objects.get(name='Volunteer') 
+            volunteer_group = Group.objects.get(name='Volunteer')
             volunteer_group.user_set.add(user)
 
             login(request, user)

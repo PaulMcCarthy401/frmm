@@ -10,7 +10,7 @@ urlpatterns = [
     # url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
     path('', include('django.contrib.auth.urls')),
     path('', views.TicketCreate.as_view(), name='index'),
-    path('volunteer', views.VolunteerPage.as_view(), name='volunteer_page'),
+    path('volunteer/', views.ResourceCreateView.as_view(), name='volunteer_page'),
     path('firstresponder', views.FirstResponderPage.as_view(), name='first_responder_page'),
     path('firstresponderchief', views.FirstResponderChiefPage.as_view(), name='first_responder_chief_page'),
     path('mission/', views.MissionCreate.as_view(), name='mission_create'),
